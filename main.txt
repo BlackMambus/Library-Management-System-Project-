@@ -1,0 +1,56 @@
+-- Members Table
+CREATE TABLE Members (
+    member_id INT PRIMARY KEY AUTO_INCREMENT,
+    full_name VARCHAR(100),
+    email VARCHAR(100) UNIQUE,
+    phone VARCHAR(15),
+    address TEXT,
+    membership_date DATE,
+    status VARCHAR(20) DEFAULT 'Active' -- Active, Inactive, Banned
+);
+
+-- Books Table
+CREATE TABLE Books (
+    book_id INT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(200),
+    author VARCHAR(100),
+    publisher VARCHAR(100),
+    isbn VARCHAR(20) UNIQUE,
+    genre VARCHAR(50),
+    total_copies INT,
+    available_copies INT,
+    added_date DATE
+);
+
+-- Staff Table
+CREATE TABLE Staff (
+    staff_id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100),
+    role VARCHAR(50), -- e.g., Librarian, Assistant
+    email VARCHAR(100),
+    phone VARCHAR(15),
+    hire_date DATE
+);
+
+-- Borrow Records Table
+CREATE TABLE BorrowRecords (
+    borrow_id INT PRIMARY KEY AUTO_INCREMENT,
+    member_id INT,
+    book_id INT,
+    borrow_date DATE,
+    due_date DATE,
+    return_date DATE,
+    status VARCHAR(20) DEFAULT 'Borrowed', -- Borrowed, Returned, Overdue
+    FOREIGN KEY (member_id) REFERENCES Members(member_id),
+    FOREIGN KEY (book_id) REFERENCES Books(book_id)
+);
+
+-- Fines Table
+CREATE TABLE Fines (
+    fine_id INT PRIMARY KEY AUTO_INCREMENT,
+    borrow_id INT,
+    fine_amount DECIMAL(10, 2),
+    paid BOOLEAN DEFAULT FALSE,
+    payment_date DATE,
+    FOREIGN KEY (borrow_id) REFERENCES BorrowRecords(borrow_id)
+);
